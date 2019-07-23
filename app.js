@@ -7,7 +7,7 @@ const logger = require('volleyball')
 
 app.use(logger)
 
-app.use('/static', express.static(__dirname + '/static'))
+app.use('/static', express.static(__dirname + '/dist'))
 
 // Маршруты
 app.get('/', function (request, response) {
