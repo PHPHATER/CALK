@@ -4,15 +4,16 @@ const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 const logger = require('volleyball')
+const serveStatic = require('serve-static')
 
 app.use(logger)
 
-app.use('/static', express.static(__dirname + '/dist'))
-
+//app.use('/static', express.static(__dirname + '/dist'))
+app.use(serveStatic(__dirname + "/dist"));
 // Маршруты
-app.get('/', function (request, response) {
-    response.sendFile(path.join(__dirname, '/dist/index.html'))
-});
+// app.get('/', function (request, response) {
+//     response.sendFile(path.join(__dirname, '/dist/index.html'))
+// });
 
 let ogruzki = [];
 let sms =[];
