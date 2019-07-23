@@ -6,8 +6,8 @@
   },
   "private": true,
   "scripts": {
-    "postinstall": "npm run build",
-    "start": "node app.js"
+    "build": "vue-cli-service build",
+    "start": "node server.js"
   },
   "dependencies": {
     "core-js": "^2.6.5",
