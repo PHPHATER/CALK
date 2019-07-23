@@ -23,7 +23,7 @@
         </div>
         </div>
       </div>
-      <el-form :model="user" @submit.prevent.stop="join('user')" v-if="!joined" :rules="rules" ref="user">
+      <el-form :model="user" @submit.prevent.native="join('user')"  :rules="rules" ref="user">
         <el-form-item label="Поганяло" prop="name">
           <el-input v-model="user.name"></el-input>
         </el-form-item>
@@ -33,7 +33,9 @@
             <el-radio label="JS"></el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-button type="primary" @click.prevent.stop="join('user')">Законектиться</el-button>
+        <el-form-item>
+          <el-button type="primary" @click="join('user')">Законектиться</el-button>
+        </el-form-item>
       </el-form>
     </section>
     <section>
