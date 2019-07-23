@@ -67,7 +67,7 @@ export default {
           { required: true, message: 'Укажи кто ты по масти, пидор!', trigger: 'change' }
         ]
       },
-      socket: io('localhost:5000')
+      socket: io()
     }
   },
   created() {
