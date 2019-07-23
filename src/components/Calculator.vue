@@ -67,7 +67,7 @@ export default {
           { required: true, message: 'Укажи кто ты по масти, пидор!', trigger: 'change' }
         ]
       },
-      socket: io()
+      socket: io('https://kalkulate.herokuapp.com/')
     }
   },
   created() {
