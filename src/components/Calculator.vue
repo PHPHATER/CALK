@@ -2,13 +2,16 @@
   <div>
     <h1>OGRUZKI</h1>
     <section>
-      <h3>Calculiryem dostavky online</h3>
+      <h3>TYT SMS CLOUD</h3>
       <div class="account" v-if="joined">
         <img v-if="src" src="@/assets/god.jpg" alt="avatar">
         <img v-else src="@/assets/pidr.jpg" alt="avatar">
         <span>{{ user.name }}</span>
         <small>{{ user.position }}</small>
-        <el-button type="danger" @click.prevent="sebat">Сьебать</el-button>
+        <el-row>
+          <el-button type="success" icon="el-icon-message" :disabled="formExist" circle @click.prevent="showForm"></el-button>
+          <el-button icon="el-icon-switch-button" circle type="danger" @click.prevent="sebat"></el-button>
+        </el-row>
       </div>
       <div class="ogruzochki" v-if="joined">
         <h2>Огрызки в сети:</h2>
@@ -43,6 +46,29 @@
         
       </div>
     </section>
+    <section class="sms-grid" v-if="joined">
+      <el-tag :type="message.color" v-for="message in sms" :key="message.id" closable @close="removeSMS(message.id)">
+        {{ message.text }}
+      </el-tag>
+    </section>
+    <el-form :model="smsHolder" @submit.prevent.native="sendSMS('smsHolder')" v-if="joined && formExist" :rules="rules2" ref="smsHolder" class="smsbottom">
+      <el-button icon="el-icon-close" class="form-hider" circle type="danger" @click.prevent="hideForm"></el-button>
+      <el-form-item  prop="text">
+          <el-input placeholder="Напиши Какой-то Хуеты" v-model="smsHolder.text"></el-input>
+      </el-form-item>
+      <el-form-item label="Выбери цвет смс" prop="color">
+        <el-radio-group v-model="smsHolder.color">
+          <el-radio label="primary">Blue</el-radio>
+          <el-radio label="success">Green</el-radio>
+          <el-radio label="info">Grey</el-radio>
+          <el-radio label="warning">Orange</el-radio>
+          <el-radio label="danger">Red</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="sendSMS('smsHolder')">Послать</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
@@ -53,6 +79,12 @@ export default {
   data() {
     return {
       joined: false,
+      formExist: false,
+      smsHolder: {
+        id: null,
+        text: '',
+        color: ''
+      },
       user: {
         id: null,
         name: '',
@@ -60,6 +92,7 @@ export default {
         avatar: '',
       },
       ogruzki: [],
+      sms: [],
       rules: {
         name: [
           { required: true, message: 'Впиши свое поганяло, пидор!', trigger: 'blur' },
@@ -69,7 +102,16 @@ export default {
           { required: true, message: 'Укажи кто ты по масти, пидор!', trigger: 'change' }
         ]
       },
-      socket: io('https://kalkulate.herokuapp.com/')
+      rules2: {
+        text: [
+          { required: true, message: 'Впиши свое смс, пидор!', trigger: 'blur' },
+          { min: 3, max: 20, message: 'Длина смс от 3х до 20 символов, пидор!', trigger: 'blur' }
+        ],
+        color: [
+          { required: true, message: 'Укажи цвет смс, пидор!', trigger: 'change' }
+        ]
+      },
+      socket: io('https://kalkulate.herokuapp.com/') // io('localhost:5000')
     }
   },
   created() {
@@ -78,6 +120,9 @@ export default {
   mounted() {
     this.socket.on('state', data => {
       this.ogruzki =  data
+    })
+    this.socket.on('state2', data => {
+      this.sms = data
     })
   },
   watch: {
@@ -104,6 +149,12 @@ export default {
     }
   },
   methods: {
+    showForm() {
+      this.formExist = true
+    },
+    hideForm() {
+      this.formExist = false
+    },
     join(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -128,6 +179,31 @@ export default {
         }
       })
     },
+    sendSMS(formName) {
+      this.smsHolder.id = Date.now()
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.socket.emit('sms', {
+            id: this.smsHolder.id,
+            text: this.smsHolder.text,
+            color: this.smsHolder.color
+          })
+          this.smsHolder.id = null
+          this.smsHolder.text = ''
+          this.smsHolder.color = ''
+        } else {
+          this.$alert('Слышь, пидрила. Соберись нахуй', 'Обнаружен Пидор', {
+          confirmButtonText: 'OK',
+          callback: () => {
+            this.$message({
+              type: 'error',
+              message: 'Постарайся не быть пидором'
+            });
+          }
+        });
+        }
+      })
+    },
     sebat() {
       this.socket.emit('sebat', {
         name: this.user.name,
@@ -137,6 +213,11 @@ export default {
       this.user.name = ''
       this.user.id = ''
       this.user.position = ''
+    },
+    removeSMS(id) {
+      this.socket.emit('deleteSMS', {
+        id: id
+      })
     }
   },
   destroyed() {
@@ -154,7 +235,11 @@ export default {
     background: #000;
     border-radius: 10px;
 }
-
+.form-hider {
+    position: absolute;
+    top: -25px;
+    left: 25px;
+}
 .el-form-item__label {
     color: #fff;
 }
@@ -242,5 +327,15 @@ body {
     overflow-y: auto;
     margin-left: -15px;
     margin-right: -15px;
+}
+.el-form.smsbottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding-bottom: 0;
+    border-radius: 0;
 }
 </style>

@@ -16,7 +16,7 @@ app.use(serveStatic(__dirname + "/dist"));
 // });
 
 let ogruzki = [];
-let sms =[];
+let sms = [];
 
 
 io.on('connection', socket => {
@@ -38,9 +38,22 @@ io.on('connection', socket => {
         })
         io.sockets.emit('state', ogruzki)
     });
-    socket.on('save-message', data => {
+    socket.on('sms', data => {
         console.log(data);
-        sms.push(data.text)
+        sms.push({
+            id: data.id,
+            text: data.text,
+            color: data.color
+        })
+        io.sockets.emit('state2', sms)
+    });
+    socket.on('deleteSMS', data => {
+        
+        sms = sms.filter(obj => {
+            return obj.id !== data.id
+        })
+        io.sockets.emit('state2', sms)
+        console.log(sms)
     });
 })
 
