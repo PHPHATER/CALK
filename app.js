@@ -47,7 +47,7 @@ io.on('connection', socket => {
     //io.sockets.emit('state', sms)
 
 
-server.listen(5000, () => {
+server.listen(process.env.PORT || 5000, () => {
     console.log('Подымаю сервер с колен.....')
     setTimeout(() => {
         console.log('Сервак стоит на своих двух и 5000 порту')
