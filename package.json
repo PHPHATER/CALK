@@ -52,5 +52,17 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "description": "## Project setup ``` npm install ```",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PHPHATER/CALK.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PHPHATER/CALK/issues"
+  },
+  "homepage": "https://github.com/PHPHATER/CALK#readme"
 }
