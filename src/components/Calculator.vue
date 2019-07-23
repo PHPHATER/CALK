@@ -23,7 +23,7 @@
         </div>
         </div>
       </div>
-      <el-form :model="user" @submit.prevent.native="join('user')"  :rules="rules" ref="user">
+      <el-form :model="user" @submit.prevent.native="join('user')" v-if="!joined" :rules="rules" ref="user">
         <el-form-item label="Поганяло" prop="name">
           <el-input v-model="user.name"></el-input>
         </el-form-item>
