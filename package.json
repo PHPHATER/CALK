@@ -6,7 +6,9 @@
   },
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "start": "node app.js"
   },
   "dependencies": {
     "core-js": "^2.6.5",
