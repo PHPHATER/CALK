@@ -143,7 +143,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 .el-form {
     max-width: 600px;
     margin-left: auto;
