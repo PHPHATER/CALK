@@ -29,6 +29,7 @@ io.on('connection', socket => {
         })
         console.log(data, ogruzki)
         io.sockets.emit('state', ogruzki)
+        io.sockets.emit('state2', sms)
     })
     socket.on('sebat', data => {
         console.log(data.id)
