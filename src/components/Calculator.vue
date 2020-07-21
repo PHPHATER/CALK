@@ -166,9 +166,9 @@ export default {
             trigger: "blur"
           },
           {
-            min: 3,
-            max: 20,
-            message: "Длина смс от 3х до 20 символов, пидор!",
+            min: 1,
+            max: 50,
+            message: "Длина смс от 1го до 50 символов, пидор!",
             trigger: "blur"
           }
         ],
