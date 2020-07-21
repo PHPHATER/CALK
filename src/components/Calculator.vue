@@ -1,8 +1,8 @@
 <template>
   <div style="margin-top: 138px;">
-    <h1>OGRUZKI</h1>
+    <h1>АЛКАШИ</h1>
     <section>
-      <h3>TYT SMS CLOUD</h3>
+      <h3>Срач:</h3>
       <div class="account" v-if="joined">
         <img v-if="src" src="@/assets/god.jpg" alt="avatar" />
         <img v-else src="@/assets/pidr.jpg" alt="avatar" />
@@ -20,14 +20,14 @@
         </el-row>
       </div>
       <div class="ogruzochki" v-if="joined">
-        <h2>Огрызки в сети:</h2>
+        <h2>Алкаши:</h2>
         <div class="over">
           <div class="ogryzok" v-for="ogryzok in ogruzki" :key="ogryzok.id">
             <img v-if="ogryzok.avatar == 'GOD'" src="@/assets/god.jpg" alt="avatar" />
             <img v-else src="@/assets/pidr.jpg" alt="avatar" />
             <div class="data">
               <div class="name">
-                Имя Огрызка:
+                Имя Алкаша:
                 <span>{{ ogryzok.name }}</span>
               </div>
               <div class="position">
