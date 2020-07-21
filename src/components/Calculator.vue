@@ -54,6 +54,9 @@
             <el-radio label="JS"></el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="Пароль" prop="password">
+          <el-input v-model="user.password" show-password></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="join('user')">Законектиться</el-button>
         </el-form-item>
@@ -122,7 +125,8 @@ export default {
         id: null,
         name: "",
         position: "",
-        avatar: ""
+        avatar: "",
+        password: ''
       },
       ogruzki: [],
       sms: [],
@@ -145,6 +149,12 @@ export default {
             required: true,
             message: "Укажи кто ты по масти, пидор!",
             trigger: "change"
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: 'Пароль сука!!!!'
           }
         ]
       },
@@ -217,13 +227,26 @@ export default {
     join(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.socket.emit("join", {
-            id: this.user.id,
-            name: this.user.name,
-            position: this.user.position,
-            avatar: this.user.avatar
+          if (this.user.password === '3x3') {
+            this.socket.emit("join", {
+              id: this.user.id,
+              name: this.user.name,
+              position: this.user.position,
+              avatar: this.user.avatar
+            });
+            this.joined = true;
+          } else {
+            this.joined = false;
+            this.$alert("Слышь, хакер. Соберись нахуй", "Обнаружен Хакер", {
+            confirmButtonText: "OK",
+            callback: () => {
+              this.$message({
+                type: "error",
+                message: "Не знаешь пароль - иди нахуй"
+              });
+            }
           });
-          this.joined = true;
+          }
         } else {
           this.joined = false;
           this.$alert("Слышь, пидрила. Соберись нахуй", "Обнаружен Пидор", {
